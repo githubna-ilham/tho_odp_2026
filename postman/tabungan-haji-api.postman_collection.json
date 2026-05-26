@@ -1,0 +1,128 @@
+{
+  "info": {
+    "name": "Tabungan Haji API",
+    "description": "Collection untuk endpoint Tabungan Haji API (modul Nasabah). Set variable `baseUrl` di environment atau di tab Variables collection ini.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b1d2e3f4-1111-2222-3333-444455556666"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "nasabahId",
+      "value": "",
+      "type": "string",
+      "description": "Otomatis di-set dari response Create Nasabah"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Nasabah",
+      "item": [
+        {
+          "name": "Create Nasabah",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.id) {",
+                  "    pm.collectionVariables.set('nasabahId', json.id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"3201234567890123\",\n  \"nama\": \"Ahmad Fauzi\",\n  \"email\": \"ahmad.fauzi@example.com\",\n  \"nomorHp\": \"081234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/nasabah",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "nasabah"]
+            }
+          }
+        },
+        {
+          "name": "Get All Nasabah",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/nasabah",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "nasabah"]
+            }
+          }
+        },
+        {
+          "name": "Get Nasabah By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/nasabah/{{nasabahId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "nasabah", "{{nasabahId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Nasabah",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Ahmad Fauzi Updated\",\n  \"nomorHp\": \"081298765432\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/nasabah/{{nasabahId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "nasabah", "{{nasabahId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Nasabah",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/nasabah/{{nasabahId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "nasabah", "{{nasabahId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
