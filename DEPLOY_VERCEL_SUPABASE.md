@@ -25,6 +25,34 @@ Model seperti ini cocok untuk local development, tetapi belum cocok langsung unt
 3. Simpan password database dengan aman.
 4. Ambil connection string PostgreSQL dari Supabase.
 
+## 1.1 Pilihan Supabase yang Dipakai
+
+Di halaman **Connect to your project**, Supabase menampilkan beberapa mode:
+
+- **Framework / Next.js**: dipakai kalau aplikasi Next.js ingin memakai Supabase client library, misalnya untuk auth, browser client, server component client, atau session refresh middleware.
+- **Direct / Connection string**: dipakai kalau aplikasi/backend ingin connect langsung ke PostgreSQL.
+- **ORM / Third-party library**: dipakai kalau memakai Prisma, Drizzle, atau ORM lain.
+- **MCP / Connect your agent**: opsional untuk tooling AI agent, bukan kebutuhan runtime aplikasi.
+
+Untuk backend `tabungan-haji-api1`, yang relevan adalah **connection string PostgreSQL**, bukan setup Next.js client.
+
+Package ini:
+
+```bash
+npm install @supabase/supabase-js @supabase/ssr
+```
+
+tidak dibutuhkan untuk backend Express + Prisma saat ini, kecuali nanti backend memang ingin memakai fitur Supabase Auth/Storage lewat Supabase SDK.
+
+Env ini:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+```
+
+juga bukan env utama untuk backend Express + Prisma. Itu lebih cocok untuk frontend Next.js. Backend kita cukup memakai `DATABASE_URL`, `DIRECT_URL`, dan env aplikasi seperti `JWT_SECRET`.
+
 Gunakan format seperti ini untuk `DATABASE_URL`:
 
 ```env
@@ -38,11 +66,26 @@ DATABASE_URL="postgresql://postgres.[PROJECT_REF]:[PASSWORD]@[POOLER_HOST]:6543/
 DIRECT_URL="postgresql://postgres:[PASSWORD]@[DB_HOST]:5432/postgres"
 ```
 
+Jika Supabase UI memberikan connection string pooler seperti ini:
+
+```env
+postgresql://postgres.vepozqmeoqrjbbjmgquu:[YOUR-PASSWORD]@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres
+```
+
+maka gunakan sebagai dasar `DATABASE_URL`, lalu ganti `[YOUR-PASSWORD]` dengan password database:
+
+```env
+DATABASE_URL="postgresql://postgres.vepozqmeoqrjbbjmgquu:PASSWORD_ANDA@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1"
+```
+
+Untuk `DIRECT_URL`, ambil dari pilihan **Direct connection** Supabase, bukan pooler. Bentuknya biasanya berbeda dari host `pooler.supabase.com`.
+
 Catatan:
 
 - `DATABASE_URL` dipakai aplikasi ketika runtime di Vercel.
 - `DIRECT_URL` dipakai Prisma untuk migration.
 - Jangan commit value asli `.env` ke Git.
+- Jika password mengandung karakter khusus seperti `@`, `#`, `/`, `?`, `:`, atau `%`, encode password dulu sebelum dimasukkan ke connection string.
 
 ## 2. Update Prisma Schema
 
@@ -390,4 +433,3 @@ NEXT_PUBLIC_API_URL=https://nama-project-api.vercel.app/api/v1
 ```
 
 Frontend akan memakai URL ini untuk cek `/health` dan endpoint API lain.
-
