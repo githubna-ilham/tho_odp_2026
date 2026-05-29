@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.tabunganRoutes = void 0;
+const express_1 = require("express");
+const tabungan_controller_1 = require("./tabungan.controller");
+exports.tabunganRoutes = (0, express_1.Router)();
+exports.tabunganRoutes.post('/', tabungan_controller_1.tabunganController.buka);
+exports.tabunganRoutes.get('/:id', tabungan_controller_1.tabunganController.detail);
+exports.tabunganRoutes.get('/:id/mutasi', tabungan_controller_1.tabunganController.mutasi);
+exports.tabunganRoutes.post('/:id/setor', tabungan_controller_1.tabunganController.setor);

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.nasabahRoutes = void 0;
+const express_1 = require("express");
+const nasabah_controller_1 = require("./nasabah.controller");
+exports.nasabahRoutes = (0, express_1.Router)();
+exports.nasabahRoutes.post('/', nasabah_controller_1.nasabahController.create);
+exports.nasabahRoutes.get('/', nasabah_controller_1.nasabahController.findAll);
+exports.nasabahRoutes.get('/:id', nasabah_controller_1.nasabahController.findById);
+exports.nasabahRoutes.put('/:id', nasabah_controller_1.nasabahController.update);
+exports.nasabahRoutes.delete('/:id', nasabah_controller_1.nasabahController.remove);
